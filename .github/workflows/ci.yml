@@ -1,10 +1,18 @@
 name: CI
 
 on:
+  # Only build and test when the Go source changes, or when a release is cut.
   push:
     branches: [ main, master ]
+    paths:
+      - 'main.go'
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
   pull_request:
     branches: [ main, master ]
+    paths:
+      - 'main.go'
 
 jobs:
   build-test:

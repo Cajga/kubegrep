@@ -5,6 +5,31 @@
 It reads a (possibly multi-document) YAML manifest from a file or standard
 input, filters the resources, and prints each matching resource as YAML.
 
+## Install
+
+Download the latest release for Linux (amd64) and install it into
+`/usr/local/bin`:
+
+```sh
+# Resolve the latest release tag, then download and install the binary.
+VERSION="$(curl -fsSL https://api.github.com/repos/Cajga/kubegrep/releases/latest \
+  | grep -oP '"tag_name":\s*"\K[^"]+')"
+curl -fsSL "https://github.com/Cajga/kubegrep/releases/download/${VERSION}/kubegrep_${VERSION}_linux_amd64.tar.gz" \
+  | tar -xzf - kubegrep
+sudo install -m 0755 kubegrep /usr/local/bin/kubegrep
+rm kubegrep
+```
+
+Then install the bash command completion config:
+
+```sh
+# Load completions in the current shell session
+source <(kubegrep completion bash)
+
+# Install completions for every new session
+kubegrep completion bash | sudo tee /etc/bash_completion.d/kubegrep > /dev/null
+```
+
 ## Build
 
 ```sh
