@@ -12,6 +12,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// version is the kubegrep version. It is overridden at build time via
+// -ldflags "-X main.version=..." by the release workflow.
+var version = "dev"
+
 // resourceMeta is used to extract the kind and metadata.name from a
 // kubernetes resource without losing the rest of the document.
 type resourceMeta struct {
@@ -33,6 +37,11 @@ func run(args []string, stdin io.Reader, stdout io.Writer) error {
 		return completion(args[1:], stdout)
 	}
 
+	if len(args) > 0 && (args[0] == "version" || args[0] == "--version") {
+		fmt.Fprintln(stdout, version)
+		return nil
+	}
+
 	fs := flag.NewFlagSet("kubegrep", flag.ContinueOnError)
 	fs.SetOutput(os.Stderr)
 
@@ -45,6 +54,7 @@ func run(args []string, stdin io.Reader, stdout io.Writer) error {
 		fmt.Fprintln(os.Stderr, "Reads from FILE or standard input when FILE is omitted.")
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Run 'kubegrep completion bash' to generate a bash completion script.")
+		fmt.Fprintln(os.Stderr, "Run 'kubegrep version' to print the version.")
 		fmt.Fprintln(os.Stderr, "")
 		fs.PrintDefaults()
 	}

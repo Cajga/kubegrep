@@ -141,6 +141,16 @@ func TestCompletionMissingShell(t *testing.T) {
 	}
 }
 
+func TestVersionCommand(t *testing.T) {
+	var out strings.Builder
+	if err := run([]string{"version"}, strings.NewReader(""), &out); err != nil {
+		t.Fatalf("version command failed: %v", err)
+	}
+	if strings.TrimSpace(out.String()) != version {
+		t.Errorf("expected version %q, got %q", version, out.String())
+	}
+}
+
 func TestResolveArgsTooMany(t *testing.T) {
 	if _, _, err := resolveArgs([]string{"a", "b", "c"}, func(string) bool { return false }); err == nil {
 		t.Errorf("expected error for too many arguments")
