@@ -6,3 +6,6 @@
 
 # Output of go coverage tool
 *.out
+
+# IDE
+.idea/
