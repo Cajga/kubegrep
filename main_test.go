@@ -114,6 +114,33 @@ func TestResolveArgsNameAndFile(t *testing.T) {
 	}
 }
 
+func TestCompletionBash(t *testing.T) {
+	var out strings.Builder
+	if err := run([]string{"completion", "bash"}, strings.NewReader(""), &out); err != nil {
+		t.Fatalf("completion bash failed: %v", err)
+	}
+	got := out.String()
+	for _, want := range []string{"_kubegrep()", "complete -F _kubegrep kubegrep", "--kind"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("completion output missing %q, got: %s", want, got)
+		}
+	}
+}
+
+func TestCompletionUnsupportedShell(t *testing.T) {
+	var out strings.Builder
+	if err := run([]string{"completion", "zsh"}, strings.NewReader(""), &out); err == nil {
+		t.Errorf("expected error for unsupported shell")
+	}
+}
+
+func TestCompletionMissingShell(t *testing.T) {
+	var out strings.Builder
+	if err := run([]string{"completion"}, strings.NewReader(""), &out); err == nil {
+		t.Errorf("expected error when shell is omitted")
+	}
+}
+
 func TestResolveArgsTooMany(t *testing.T) {
 	if _, _, err := resolveArgs([]string{"a", "b", "c"}, func(string) bool { return false }); err == nil {
 		t.Errorf("expected error for too many arguments")

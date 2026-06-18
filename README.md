@@ -44,3 +44,18 @@ kubectl get all -o yaml | kubegrep myapp
 # Services named like "other"
 kubegrep --kind Service other manifests.yaml
 ```
+
+## Shell completion
+
+Generate a bash completion script the same way `kubectl` and `kustomize` do:
+
+```sh
+# Load completions in the current shell session
+source <(kubegrep completion bash)
+
+# Install completions for every new session (Linux)
+kubegrep completion bash > /etc/bash_completion.d/kubegrep
+
+# Install completions for every new session (macOS, Homebrew)
+kubegrep completion bash > "$(brew --prefix)/etc/bash_completion.d/kubegrep"
+```
